@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>علاء زينو — Digital Business Creator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161e;
+    --accent: #6c63ff;
+    --accent2: #00d4ff;
+    --accent3: #ff6b6b;
+    --gold: #f5c842;
+    --text: #f0f0f8;
+    --muted: #888899;
+    --border: rgba(108,99,255,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.1s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(108,99,255,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.18s ease, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* ─── GRID BG ─── */
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,15,0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow: 0 0 20px rgba(108,99,255,0.4);
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+
+  .logo-mark::after {
+    content: '';
+    position: absolute; inset: -1px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    z-index: -1;
+    filter: blur(8px); opacity: 0.5;
+  }
+
+  .logo-text {
+    display: flex; flex-direction: column;
+  }
+  .logo-text strong {
+    font-size: 16px; font-weight: 700; color: var(--text);
+    line-height: 1.2; letter-spacing: 0.5px;
+  }
+  .logo-text span {
+    font-size: 10px; color: var(--accent2); font-weight: 400;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; border: none; padding: 10px 22px;
+    border-radius: 8px; font-size: 14px; font-family: 'Cairo', sans-serif;
+    cursor: pointer; font-weight: 600;
+    box-shadow: 0 0 20px rgba(108,99,255,0.3);
+    transition: box-shadow 0.3s, transform 0.2s;
+  }
+  .nav-cta:hover { box-shadow: 0 0 30px rgba(108,99,255,0.5); transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 20px 80px;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%);
+    top: 30%; right: 15%;
+    pointer-events: none;
+    animation: pulse-glow 5s ease-in-out infinite reverse;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(108,99,255,0.1);
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 100px; padding: 8px 18px;
+    font-size: 13px; color: var(--accent2);
+    margin-bottom: 28px;
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px; background: var(--accent2);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.2; }
+  }
+
+  .hero h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(42px, 8vw, 88px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    animation: fadeInUp 0.8s ease 0.1s both;
+  }
+
+  .hero h1 .name-accent {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 16px auto 40px;
+    line-height: 1.7;
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+
+  .hero-sub strong { color: var(--accent2); }
+
+  .hero-stats {
+    display: flex; gap: 48px; justify-content: center;
+    margin-bottom: 48px;
+    animation: fadeInUp 0.8s ease 0.3s both;
+  }
+
+  .h-stat { text-align: center; }
+  .h-stat .n {
+    font-size: 32px; font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, var(--gold), #ff9f43);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .h-stat .l { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .hero-btns {
+    display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease 0.4s both;
+  }
+
+  .btn-main {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; border: none; padding: 16px 36px;
+    border-radius: 12px; font-size: 16px; font-family: 'Cairo', sans-serif;
+    cursor: pointer; font-weight: 700;
+    box-shadow: 0 8px 32px rgba(108,99,255,0.35);
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+
+  .btn-main::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    opacity: 0; transition: opacity 0.3s;
+  }
+
+  .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(108,99,255,0.5); }
+  .btn-main:hover::before { opacity: 1; }
+  .btn-main span { position: relative; z-index: 1; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 16px 36px; border-radius: 12px;
+    font-size: 16px; font-family: 'Cairo', sans-serif;
+    cursor: pointer; font-weight: 600;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+    transform: translateY(-3px);
+  }
+
+  /* ─── SCROLL INDICATOR ─── */
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 11px; letter-spacing: 2px;
+    animation: fadeInUp 1s ease 1s both;
+  }
+
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-line {
+    0%, 100% { opacity: 0.3; height: 30px; }
+    50% { opacity: 1; height: 50px; }
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap {
+    position: relative; z-index: 1;
+    overflow: hidden; padding: 20px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(108,99,255,0.03);
+  }
+
+  .marquee-track {
+    display: flex; gap: 60px; width: max-content;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-track span {
+    font-size: 13px; color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .marquee-track .dot { color: var(--accent); font-size: 18px; }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent2); font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700; line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .section-sub {
+    font-size: 16px; color: var(--muted);
+    max-width: 500px; line-height: 1.7;
+  }
+
+  /* ─── SERVICES ─── */
+  .services {
+    padding: 100px 40px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .services-header { margin-bottom: 60px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .service-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    position: relative; overflow: hidden;
+    transition: all 0.4s;
+    cursor: pointer;
+  }
+
+  .service-card::before {
+    content: ''; position: absolute;
+    top: 0; right: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+    transform: scaleX(0); transition: transform 0.4s;
+  }
+
+  .service-card:hover { transform: translateY(-6px); border-color: rgba(108,99,255,0.4); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-card .glow-corner {
+    position: absolute; top: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%; opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  .service-card:hover .glow-corner { opacity: 1; }
+
+  .card-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .service-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+  }
+
+  .price-tag {
+    display: flex; flex-direction: column; align-items: flex-end;
+  }
+
+  .price {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 28px; font-weight: 700;
+    color: var(--gold);
+  }
+
+  .price small { font-size: 14px; color: var(--muted); }
+
+  .old-price {
+    font-size: 13px; color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .service-card h3 {
+    font-size: 20px; font-weight: 700; margin-bottom: 10px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .service-card p {
+    font-size: 14px; color: var(--muted); line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .features-list {
+    list-style: none; margin-bottom: 28px;
+  }
+
+  .features-list li {
+    font-size: 13px; color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .features-list li:last-child { border-bottom: none; }
+
+  .check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(108,99,255,0.2);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--accent2); flex-shrink: 0;
+  }
+
+  .card-btn {
+    width: 100%; padding: 14px;
+    border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(108,99,255,0.08);
+    color: var(--text); font-size: 15px;
+    font-family: 'Cairo', sans-serif; font-weight: 700;
+    cursor: pointer; transition: all 0.3s;
+    text-decoration: none; display: block; text-align: center;
+  }
+
+  .card-btn:hover {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(108,99,255,0.3);
+  }
+
+  .card-btn.featured {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent;
+    box-shadow: 0 8px 24px rgba(108,99,255,0.3);
+  }
+
+  .featured-badge {
+    position: absolute; top: 20px; left: 20px;
+    background: linear-gradient(135deg, var(--gold), #ff9f43);
+    color: #1a1a00; font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 100px;
+    letter-spacing: 1px;
+  }
+
+
+  /* ─── PORTFOLIO ─── */
+  .portfolio {
+    padding: 100px 40px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .portfolio-header { margin-bottom: 50px; text-align: center; }
+  .portfolio-header .section-sub { margin: 0 auto; }
+  
+  .poster-wrapper {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 24px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+  }
+  .poster-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 24px;
+    border: 2px solid var(--border);
+    background: var(--bg2);
+  }
+  .poster-wrapper:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(108,99,255,0.3);
+    border-color: rgba(108,99,255,0.5);
+  }
+  .poster-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    box-shadow: inset 0 0 20px rgba(108,99,255,0.2);
+    pointer-events: none;
+  }
+  .poster-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; height: 80%;
+    background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+    z-index: -1;
+    filter: blur(40px);
+    transition: opacity 0.4s;
+  }
+  .poster-wrapper:hover .poster-glow {
+    opacity: 1;
+    background: radial-gradient(circle, rgba(0,212,255,0.2) 0%, transparent 70%);
+  }
+
+  /* ─── WHY ME ─── */
+  .why {
+    padding: 100px 40px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .why-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+
+  .why-points { margin-top: 40px; display: flex; flex-direction: column; gap: 24px; }
+
+  .why-point {
+    display: flex; gap: 18px; align-items: flex-start;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+  }
+
+  .why-point:hover {
+    background: rgba(108,99,255,0.06);
+    border-color: var(--border);
+  }
+
+  .why-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+    background: rgba(108,99,255,0.1);
+  }
+
+  .why-point h4 { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+  .why-point p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .why-visual {
+    position: relative;
+  }
+
+  .profile-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-card::before {
+    content: '';
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(108,99,255,0.2) 0%, transparent 70%);
+  }
+
+  .profile-avatar {
+    width: 100px; height: 100px; border-radius: 50%;
+    margin: 0 auto 16px;
+    position: relative; z-index: 1;
+    border: 3px solid rgba(108,99,255,0.3);
+    box-shadow: 0 0 40px rgba(108,99,255,0.3);
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+
+  .profile-card h3 {
+    font-size: 22px; font-weight: 700; margin-bottom: 4px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .profile-card .role {
+    font-size: 13px; color: var(--accent2); margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .profile-stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px; margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .ps-item .n {
+    font-size: 20px; font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, var(--gold), #ff9f43);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .ps-item .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .floating-cards {
+    position: absolute;
+    display: flex; flex-direction: column; gap: 12px;
+    left: -80px; top: 50%; transform: translateY(-50%);
+  }
+
+  .f-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px;
+    font-size: 13px; white-space: nowrap;
+    display: flex; align-items: center; gap: 10px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .f-card:nth-child(2) { animation-delay: 1s; }
+  .f-card:nth-child(3) { animation-delay: 2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .f-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials {
+    padding: 100px 40px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .testimonials-header { margin-bottom: 60px; text-align: center; }
+  .testimonials-header .section-sub { margin: 0 auto; }
+
+  .t-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .t-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 18px; padding: 28px;
+    position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .t-card:hover { transform: translateY(-4px); border-color: rgba(108,99,255,0.35); }
+
+  .t-card::before {
+    content: '"';
+    position: absolute; top: -10px; right: 20px;
+    font-size: 120px; font-family: 'Tajawal', sans-serif;
+    color: rgba(108,99,255,0.06); line-height: 1;
+    pointer-events: none;
+  }
+
+  .stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+
+  .t-card p {
+    font-size: 14px; color: var(--muted); line-height: 1.8;
+    margin-bottom: 20px; position: relative; z-index: 1;
+  }
+
+  .t-author {
+    display: flex; align-items: center; gap: 12px;
+    border-top: 1px solid var(--border); padding-top: 16px;
+  }
+
+  .t-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: white;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .t-author-info .name { font-size: 14px; font-weight: 600; }
+  .t-author-info .country { font-size: 12px; color: var(--muted); }
+
+  /* ─── SOCIAL / CTA ─── */
+  .cta-section {
+    padding: 100px 40px;
+    text-align: center;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(108,99,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section .section-title { font-size: clamp(28px, 5vw, 52px); margin-bottom: 16px; }
+
+  .social-links {
+    display: flex; gap: 16px; justify-content: center;
+    flex-wrap: wrap; margin: 40px auto 48px;
+    max-width: 700px;
+  }
+
+  .social-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 22px; border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text); text-decoration: none;
+    font-size: 14px; font-weight: 600;
+    transition: all 0.3s;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .social-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .social-btn:hover { transform: translateY(-3px); }
+
+  .social-btn.ig:hover { background: rgba(193,53,132,0.15); border-color: rgba(193,53,132,0.4); }
+  .social-btn.yt:hover { background: rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.3); }
+  .social-btn.tt:hover { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.2); }
+  .social-btn.wa:hover { background: rgba(37,211,102,0.12); border-color: rgba(37,211,102,0.4); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 32px 40px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--muted);
+  }
+
+  footer a { color: var(--accent2); text-decoration: none; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-stats { gap: 24px; }
+    .services { padding: 60px 20px; }
+    .why { padding: 60px 20px; }
+    .why-inner { grid-template-columns: 1fr; gap: 40px; }
+    .floating-cards { display: none; }
+    .testimonials { padding: 60px 20px; }
+    .cta-section { padding: 60px 20px; }
+    footer { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <img class="logo-mark" src="logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/42/6c63ff/ffffff?text=AZ'">
+    <div class="logo-text">
+      <strong>علاء زينو</strong>
+      <span>Digital Creator</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">الخدمات</a></li>
+    <li><a href="#why">من أنا</a></li>
+    <li><a href="#testimonials">آراء العملاء</a></li>
+    <li><a href="#contact">تواصل معي</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">ابدأ الآن</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    Digital Business Creator · صانع محتوى رقمي
+  </div>
+
+  <h1>
+    <span class="name-accent">علاء زينو</span><br>
+    يحوّل أفكارك لدخل حقيقي
+  </h1>
+
+  <p class="hero-sub">
+    من <strong>0 دولار</strong> إلى مشروع رقمي ناجح — دروس عملية، منتجات جاهزة، وحسابات مميزة تبدأ بها رحلتك الرقمية اليوم
+  </p>
+
+  <div class="hero-stats">
+    <div class="h-stat">
+      <div class="n">476K+</div>
+      <div class="l">متابع</div>
+    </div>
+    <div class="h-stat">
+      <div class="n">5+</div>
+      <div class="l">سنوات خبرة</div>
+    </div>
+    <div class="h-stat">
+      <div class="n">$440+</div>
+      <div class="l">دخل طلابه شهرياً</div>
+    </div>
+    <div class="h-stat">
+      <div class="n">100%</div>
+      <div class="l">نتائج حقيقية</div>
+    </div>
+  </div>
+
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">
+      <span>🚀 اطلب خدمة الآن</span>
+    </button>
+    <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">
+      تعرّف عليّ أكثر
+    </button>
+  </div>
+
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>منتجات رقمية</span> <span class="dot">✦</span>
+    <span>حسابات Steam Offline</span> <span class="dot">✦</span>
+    <span>ربح من الإنترنت</span> <span class="dot">✦</span>
+    <span>تسويق بالعمولة</span> <span class="dot">✦</span>
+    <span>الذكاء الاصطناعي</span> <span class="dot">✦</span>
+    <span>دروبشيبينغ</span> <span class="dot">✦</span>
+    <span>بناء مشاريع رقمية</span> <span class="dot">✦</span>
+    <span>منتجات رقمية</span> <span class="dot">✦</span>
+    <span>حسابات Steam Offline</span> <span class="dot">✦</span>
+    <span>ربح من الإنترنت</span> <span class="dot">✦</span>
+    <span>تسويق بالعمولة</span> <span class="dot">✦</span>
+    <span>الذكاء الاصطناعي</span> <span class="dot">✦</span>
+    <span>دروبشيبينغ</span> <span class="dot">✦</span>
+    <span>بناء مشاريع رقمية</span> <span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header reveal">
+    <span class="section-label">— الخدمات والمنتجات</span>
+    <h2 class="section-title">كل ما تحتاجه لتبدأ رحلتك الرقمية</h2>
+    <p class="section-sub">منتجات مدروسة وخدمات حقيقية بأسعار تناسب الجميع — سلّمت لآلاف العملاء بنجاح</p>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- Card 1: Digital Products File -->
+    <div class="service-card reveal" style="border-color: rgba(108,99,255,0.35);">
+      <span class="featured-badge">⭐ الأكثر طلباً</span>
+      <div class="glow-corner" style="background: radial-gradient(circle, rgba(108,99,255,0.3), transparent);"></div>
+      <div class="card-top">
+        <div class="service-icon" style="background: rgba(108,99,255,0.15);">📦</div>
+        <div class="price-tag">
+          <div class="price">$15 <small>فقط</small></div>
+          <div class="old-price">$40</div>
+        </div>
+      </div>
+      <h3>ملف المنتجات الرقمية</h3>
+      <p>ملف شامل يحتوي على أفضل المنتجات الرقمية الجاهزة للبيع — ابدأ عملك من اليوم الأول بدون خبرة مسبقة</p>
+      <ul class="features-list">
+        <li><span class="check">✓</span> قائمة منتجات رقمية جاهزة للبيع فورياً</li>
+        <li><span class="check">✓</span> استراتيجيات تسويق وبيع مثبتة</li>
+        <li><span class="check">✓</span> أفضل المنصات للربح من المنتجات الرقمية</li>
+        <li><span class="check">✓</span> دعم بعد الشراء عبر واتساب</li>
+        <li><span class="check">✓</span> تحديثات مجانية مدى الحياة</li>
+      </ul>
+      <a href="https://wa.me/213000000000?text=مرحبا، أريد شراء ملف المنتجات الرقمية بـ 15 دولار" class="card-btn featured" target="_blank">
+        🛒 احصل عليه الآن — $15
+      </a>
+    </div>
+
+    <!-- Card 2: Steam Offline -->
+    <div class="service-card reveal">
+      <div class="glow-corner" style="background: radial-gradient(circle, rgba(0,212,255,0.2), transparent);"></div>
+      <div class="card-top">
+        <div class="service-icon" style="background: rgba(0,212,255,0.12);">🎮</div>
+        <div class="price-tag">
+          <div class="price">$10 <small>فقط</small></div>
+          <div class="old-price">$25</div>
+        </div>
+      </div>
+      <h3>حساب Steam Offline</h3>
+      <p>حساب ستيم أوفلاين يتيح لك العب أفضل الألعاب بدون اتصال بالإنترنت — سلّم فوري بعد الدفع</p>
+      <ul class="features-list">
+        <li><span class="check">✓</span> ألعاب متعددة مضمونة</li>
+        <li><span class="check">✓</span> تسليم فوري بعد الدفع</li>
+        <li><span class="check">✓</span> ضمان الحساب لمدة 30 يوم</li>
+        <li><span class="check">✓</span> دعم فني في حالة أي مشكلة</li>
+        <li><span class="check">✓</span> وضع أوفلاين 100% — لا إنترنت مطلوب</span></li>
+      </ul>
+      <a href="https://wa.me/213000000000?text=مرحبا، أريد شراء حساب Steam Offline بـ 10 دولار" class="card-btn" target="_blank">
+        🎮 اطلب الحساب — $10
+      </a>
+    </div>
+
+    <!-- Card 3: Consultation -->
+    <div class="service-card reveal">
+      <div class="glow-corner" style="background: radial-gradient(circle, rgba(245,200,66,0.2), transparent);"></div>
+      <div class="card-top">
+        <div class="service-icon" style="background: rgba(245,200,66,0.12);">🧠</div>
+        <div class="price-tag">
+          <div class="price">تواصل <small>للسعر</small></div>
+        </div>
+      </div>
+      <h3>استشارة رقمية خاصة</h3>
+      <p>جلسة 1-on-1 مع علاء لتحليل وضعك الحالي وبناء خارطة طريق مخصصة لمشروعك الرقمي</p>
+      <ul class="features-list">
+        <li><span class="check">✓</span> تحليل مشروعك الحالي</li>
+        <li><span class="check">✓</span> خطة عمل مخصصة لك</li>
+        <li><span class="check">✓</span> استراتيجية ربح واضحة</li>
+        <li><span class="check">✓</span> متابعة لمدة أسبوع بعد الجلسة</li>
+      </ul>
+      <a href="https://wa.me/213000000000?text=مرحبا، أريد حجز استشارة خاصة" class="card-btn" target="_blank">
+        📞 احجز استشارتك
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-header reveal">
+    <span class="section-label">— معرض الأعمال</span>
+    <h2 class="section-title">نبذة من إبداعاتي</h2>
+    <p class="section-sub">تصميم البوسترات الإعلانية والهوية البصرية بلمسة عصرية واحترافية تلفت الأنظار</p>
+  </div>
+  
+  <div class="reveal">
+    <div class="poster-wrapper">
+      <div class="poster-glow"></div>
+      <img src="poster.jpg" alt="Poster Design - Alla Boutkhil" onerror="this.src='https://via.placeholder.com/600x800/111118/6c63ff?text=Poster+Preview'">
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="why">
+  <div class="why-inner">
+
+    <div>
+      <span class="section-label reveal">— من أنا؟</span>
+      <h2 class="section-title reveal">لماذا يثق بي<br>أكثر من 476 ألف شخص؟</h2>
+      <div class="why-points">
+        <div class="why-point reveal">
+          <div class="why-icon">🎯</div>
+          <div>
+            <h4>نتائج حقيقية وليست وعوداً فارغة</h4>
+            <p>طلابي وصلوا فعلياً من 0 إلى 440 دولار شهرياً — الأرقام تتحدث عن نفسها</p>
+          </div>
+        </div>
+        <div class="why-point reveal">
+          <div class="why-icon">📱</div>
+          <div>
+            <h4>محتوى عملي بدون كلام فاضي</h4>
+            <p>كل فيديو وكل منتج مبني على تجربة حقيقية — لا نظريات، فقط خطوات تطبيقية</p>
+          </div>
+        </div>
+        <div class="why-point reveal">
+          <div class="why-icon">⚡</div>
+          <div>
+            <h4>تسليم فوري ودعم مستمر</h4>
+            <p>بعد الشراء تحصل على منتجك فوراً مع دعم مباشر عبر واتساب — ما تبقى وحدك</p>
+          </div>
+        </div>
+        <div class="why-point reveal">
+          <div class="why-icon">💎</div>
+          <div>
+            <h4>أسعار في متناول الجميع</h4>
+            <p>مش لازم تدفع مبالغ ضخمة — خدمات احترافية بأسعار تبدأ من 10 دولار فقط</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-visual reveal">
+      <div class="floating-cards">
+        <div class="f-card">
+          <div class="f-dot" style="background: #00d4ff;"></div>
+          <span>تسليم فوري ✓</span>
+        </div>
+        <div class="f-card">
+          <div class="f-dot" style="background: #f5c842;"></div>
+          <span>+476K متابع</span>
+        </div>
+        <div class="f-card">
+          <div class="f-dot" style="background: #6c63ff;"></div>
+          <span>ضمان مسترجع</span>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <img class="profile-avatar" src="logo.jpg" alt="Alla Zinou" onerror="this.src='https://via.placeholder.com/100/6c63ff/ffffff?text=AZ'">
+        <h3>علاء زينو</h3>
+        <p class="role">DIGITAL BUSINESS CREATOR</p>
+        <p style="font-size:14px; color: var(--muted); line-height: 1.7;">
+          بدأت من الصفر عام 2018 ووصلت لـ 440+ دولار شهرياً عبر المنتجات الرقمية والتسويق الإلكتروني. اليوم أشارك كل أسراري معك.
+        </p>
+        <div class="profile-stats">
+          <div class="ps-item">
+            <div class="n">476K</div>
+            <div class="l">متابع</div>
+          </div>
+          <div class="ps-item">
+            <div class="n">5+</div>
+            <div class="l">سنوات</div>
+          </div>
+          <div class="ps-item">
+            <div class="n">$440</div>
+            <div class="l">شهرياً</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-header reveal">
+    <span class="section-label">— آراء العملاء</span>
+    <h2 class="section-title">ماذا قال من جرّب الخدمة؟</h2>
+    <p class="section-sub">آراء حقيقية من متابعين وعملاء استفادوا من المنتجات والخدمات</p>
+  </div>
+
+  <div class="t-grid">
+    <div class="t-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>اشتريت ملف المنتجات الرقمية وبصراحة ما كنت متوقع هالمستوى — محتوى ممتاز ومفيد جداً، خلال أسبوع بدأت أبيع وعندي أول بيعة!</p>
+      <div class="t-author">
+        <div class="t-avatar" style="background: linear-gradient(135deg, #6c63ff, #00d4ff);">أح</div>
+        <div class="t-author-info">
+          <div class="name">أحمد م.</div>
+          <div class="country">🇩🇿 الجزائر</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>حساب ستيم أوفلاين وصلني فوري زي ما قال — العاب ممتازة وشغّالة 100% بدون أي مشكلة. سعر ما يصدق بصدق!</p>
+      <div class="t-author">
+        <div class="t-avatar" style="background: linear-gradient(135deg, #f5c842, #ff9f43);">يس</div>
+        <div class="t-author-info">
+          <div class="name">ياسين ك.</div>
+          <div class="country">🇲🇦 المغرب</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>علاء إنسان محترم جداً — اشتريت منه مرتين وكل مرة خدمة ممتازة ورد سريع. ملف المنتجات الرقمية غيّر طريقة تفكيري بالكامل.</p>
+      <div class="t-author">
+        <div class="t-avatar" style="background: linear-gradient(135deg, #ff6b6b, #ff9f43);">سا</div>
+        <div class="t-author-info">
+          <div class="name">سارة ب.</div>
+          <div class="country">🇹🇳 تونس</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA + SOCIAL -->
+<section class="cta-section" id="contact">
+  <span class="section-label reveal">— تواصل معي</span>
+  <h2 class="section-title reveal">جاهز تبدأ؟<br><span style="background: linear-gradient(135deg,#6c63ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">خطوة واحدة تفصلك</span></h2>
+  <p style="font-size:16px; color: var(--muted); max-width: 480px; margin: 0 auto; line-height:1.7;" class="reveal">
+    تابعني على السوشيال ميديا للمحتوى المجاني، أو تواصل معي مباشرة لطلب الخدمة
+  </p>
+
+  <div class="social-links reveal">
+
+    <a href="https://www.instagram.com/alla_zinou/" target="_blank" class="social-btn ig">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      Instagram · @alla_zinou
+    </a>
+
+    <a href="https://www.tiktok.com/@alla_zinou" target="_blank" class="social-btn tt">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34v-7a8.16 8.16 0 0 0 4.78 1.52V6.42a4.85 4.85 0 0 1-1.01-.27"/></svg>
+      TikTok · @alla_zinou
+    </a>
+
+    <a href="https://www.youtube.com/@alla_zinou" target="_blank" class="social-btn yt">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+      YouTube · علاء زينو
+    </a>
+
+    <a href="https://wa.me/213000000000?text=مرحبا علاء، أريد الاستفسار عن خدماتك" target="_blank" class="social-btn wa">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      واتساب — اطلب الخدمة
+    </a>
+
+  </div>
+
+  <button class="btn-main" style="font-size:18px; padding: 18px 48px;" onclick="window.open('https://wa.me/213000000000?text=مرحبا علاء، أريد الاستفسار عن خدماتك', '_blank')">
+    <span>💬 تواصل الآن عبر واتساب</span>
+  </button>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>صُنع بـ ❤️ لـ <a href="https://www.instagram.com/alla_zinou/" target="_blank">@alla_zinou</a> — جميع الحقوق محفوظة © 2025</p>
+</footer>
+
+<script>
+  // ─── CURSOR ───
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+  });
+
+  function animateRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .service-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform += ' scale(2.5)';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+      ring.style.borderColor = 'rgba(0,212,255,0.5)';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+      ring.style.borderColor = 'rgba(108,99,255,0.5)';
+    });
+  });
+
+  // ─── SCROLL REVEAL ───
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ─── NAV SCROLL ───
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.borderBottomColor = window.scrollY > 50
+      ? 'rgba(108,99,255,0.35)' : 'rgba(108,99,255,0.2)';
+  });
+
+  // ─── CARD GLOW FOLLOW ───
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(108,99,255,0.07), var(--bg2) 60%)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.background = 'var(--bg2)';
+    });
+  });
+
+  // ─── COUNTER ANIMATION ───
+  function animateCounter(el, target, suffix = '', duration = 1500) {
+    let start = 0;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const val = el.dataset.val;
+        const suffix = el.dataset.suffix || '';
+        animateCounter(el, parseInt(val), suffix);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.n[data-val]').forEach(el => counterObserver.observe(el));
+</script>
+</body>
+</html>
